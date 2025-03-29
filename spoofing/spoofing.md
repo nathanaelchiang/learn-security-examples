@@ -32,3 +32,7 @@ This example demonstrates spoofind through two ways -- Stealing cookies programm
 1. Briefly explain the spoofing vulnerability in **insecure.ts**.
 2. Briefly explain different ways in which vulnerability can be exploited.
 3. Briefly explain why **secure.ts** does not have the spoofing vulnerability in **insecure.ts**.
+
+1. The cookie has `httpOnly: false` so the session cookie is accessible with JavaScript so an attacker can steal this cookie from a malicious site or script. There is also no CSRF protection as the server blindly trusts POST requests from any site which may include potential malicious sites. Also, cookies can also be sent cross-site with forged requests.
+2. A user can visit a malicious HTML file such as ` mal-steal-cookie.html` and the attacker can steal the sessionID and the attacker can use this stolen session to impersonate the user. A user can also log in  as an admin and host `mal-csrf.html`. This auto-submits a form so that the browser automatically sends the user's cookie along with the request when it is clicked and since insecure.ts doesn't verify the request's origin, this operation works.
+3. In secure.ts, the first problem is solved because of `httpOnly: true` so the cookie can't be accessed with JavaScript. `sameSite: true` forces cookies to only be sent with same-site requests so it blocks CSRF since it prevents cross-site requests from sending the session cookie. 

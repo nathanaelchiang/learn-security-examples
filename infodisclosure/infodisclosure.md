@@ -33,3 +33,8 @@ Answer the following:
 1. Briefly explain the potential vulnerabilities in **insecure.ts**
 2. Briefly explain how a malicious attacker can exploit them.
 3. Briefly explain the defensive techniques used in **secure.ts** to prevent the information disclosure vulnerability?
+
+1. ```const user = await User.findOne({ username: username as string }).exec();```
+This line of code is insecure because it is vulnerable to NosQL inection. It passes the user input from req.query directly into the MongoDB query without validation or sanitization.
+2. This can lead to an information disclosure attack because an attack query can inject a query that tells MongoDB to return any user whose username is not equal to an empty string which may disclose the usernames in the database. This causes the server to disclose sensitive user information without proper authentication.
+3. The secure.ts does type checking to make sure that username is a string and not a complex object such as a query. We also use input sanitization to remove non-alphanumeric characters to help guard against potential injections. The try-catch block also handles errors gracefully to help avoid leaking internal server info.
